@@ -531,11 +531,9 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset()
-      getUser().then(response => {
         this.title = '新增用户'
         this.open = true
         this.form.password = this.initPassword
-      })
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
