@@ -535,11 +535,11 @@ export default {
     //     this.title = "分配数据权限";
     //   });
     // },
-    /** 提交按钮 */
+    /** 确定按钮 */
     submitForm: function() {
       this.$refs['form'].validate(valid => {
         if (valid) {
-          if (this.form.userId != undefined) {
+          if (this.form.roleId != undefined) {
             updateRole(this.form).then(response => {
               this.msgSuccess('修改成功')
               this.open = false

@@ -174,7 +174,7 @@
               <el-button
                 size="mini"
                 type="text"
-                icon="el-icon-update"
+                icon="el-icon-edit"
                 @click="handleUpdate(scope.row)"
                 v-hasPermi="['media:user:update']"
               >修改
@@ -377,15 +377,6 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10
-        // userName: undefined,
-        // phoneNumber: undefined,
-        // status: undefined,
-        // deptId: undefined,
-        // grade: undefined,
-        // age: undefined,
-        // background: undefined,
-        // sex: undefined,
-        // scheduling: undefined
       },
       // 列信息
       columns: [
