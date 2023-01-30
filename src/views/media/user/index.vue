@@ -359,15 +359,12 @@ export default {
       statusOptions: [],
       // 性别状态字典
       sexOptions: [],
-      // 科室选项
+      // // 科室选项
       deptOptions: [],
       // 是否排班选项
       schedulingOptions: [],
       //背景（学历）选项
       backgroundOptions: [],
-      // 角色选项
-      // roleOptions: [],
-
       // 表单参数
       form: {},
       defaultProps: {

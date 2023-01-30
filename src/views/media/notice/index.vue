@@ -185,8 +185,8 @@
         <el-form ref="form" :model="form" label-width="80px">
           <el-row>
             <el-col :span="24">
-              <el-form-item label="内容" aria-readonly="true">
-                <editor v-model="form.noticeContent" :min-height="192"  readOnly="true"/>
+              <el-form-item label="内容">
+                <editor v-model="form.noticeContent" :min-height="192" readOnly="true"/>
               </el-form-item>
             </el-col>
           </el-row>
@@ -201,7 +201,7 @@
 </template>
 
 <script>
-import { listNotice, getNotice, delNotice, addNotice, updateNotice, exportNotice } from "@/api/media/notice";
+import { listNotice, getNotice, delNotice, addNotice, updateNotice} from "@/api/media/notice";
 import Editor from '@/components/Editor';
 
 export default {
@@ -325,8 +325,8 @@ export default {
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
-      const noticeId = row.noticeId || this.ids
-      getNotice(noticeId).then(response => {
+      const noticeIds = row.noticeId || this.ids
+      getNotice(noticeIds).then(response => {
         this.form = response.data;
         this.openEdit = true;
         this.title = "修改公告";
