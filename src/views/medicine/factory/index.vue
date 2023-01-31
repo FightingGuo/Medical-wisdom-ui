@@ -380,12 +380,12 @@ export default {
     // 表单重置
     reset() {
       this.form = {
-        factoryId: undefined,
         factoryName: undefined,
         factoryCode: undefined,
         contact: undefined,
         telephoneNum: undefined,
         key: undefined,
+        address: undefined,
         status: '0',
       }
       this.resetForm('form')

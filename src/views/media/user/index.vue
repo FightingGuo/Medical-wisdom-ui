@@ -494,8 +494,6 @@ export default {
         scheduling: undefined,
         status: '0',
         remark: undefined
-        // postIds: [],
-        // roleIds: []
       }
       this.resetForm('form')
     },
