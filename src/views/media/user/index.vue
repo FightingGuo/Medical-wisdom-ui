@@ -188,14 +188,6 @@
                 v-hasPermi="['media:user:remove']"
               >删除
               </el-button>
-<!--              <el-button-->
-<!--                size="mini"-->
-<!--                type="text"-->
-<!--                icon="el-icon-key"-->
-<!--                @click="handleResetPwd(scope.row)"-->
-<!--                v-hasPermi="['media:user:resetPwd']"-->
-<!--              >重置-->
-<!--              </el-button>-->
             </template>
           </el-table-column>
         </el-table>
@@ -319,14 +311,10 @@ import {
   importTemplate,
   getDeptList
 } from '@/api/media/user'
-import { getToken } from '@/utils/auth'
-import { treeselect } from '@/api/media/dept'
-import Treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 
 export default {
   name: 'User',
-  components: { Treeselect },
   data() {
     return {
       // 遮罩层

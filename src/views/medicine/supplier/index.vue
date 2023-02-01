@@ -1,46 +1,38 @@
 <template>
   <div class="app-container">
     <el-row :gutter="20">
-      <!--药品信息-->
+      <!--供应商信息-->
       <el-col :span="100" :xs="25">
-        <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
-          <el-form-item label="生产厂家" prop="factoryId">
-            <el-select v-model="queryParams.factoryId" placeholder="请选择生产厂家" clearable :style="{width: '100%'}">
-              <el-option v-for="item in medicineFactoryOptions" :key="item.factoryId" :label="item.factoryName"
-                         :value="item.factoryId" :disabled="item.disabled"  ></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="药品名称" prop="medicineName">
+        <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="100px">
+          <el-form-item label="供应商名称" prop="supplierName">
             <el-input
-              v-model="queryParams.medicineName"
-              placeholder="请输入药品名称"
+              v-model="queryParams.supplierName"
+              placeholder="请输入供应商名称"
               clearable
               size="small"
-              style="width: 240px"
+              style="width: 220px"
               @keyup.enter.native="handleQuery"
             />
           </el-form-item>
-          <el-form-item label="药品编码" prop="medicineCode">
+          <el-form-item label="联系人" prop="contact" >
             <el-input
-              v-model="queryParams.medicineCode"
-              placeholder="请输入药品编码"
+              v-model="queryParams.contact"
+              placeholder="请输入联系人"
               clearable
               size="small"
-              style="width: 240px"
+              style="width: 220px"
               @keyup.enter.native="handleQuery"
             />
-          </el-form-item>
-          <el-form-item label="药品类型" prop="medicineType">
-            <el-select v-model="queryParams.medicineType" placeholder="请选择药品类型" clearable :style="{width: '100%'}">
-              <el-option label="中草药" value="中草药"></el-option>
-              <el-option label="西药" value="西药" ></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="处方类型" prop="prescriptionType">
-            <el-select v-model="queryParams.prescriptionType" placeholder="请选择处方类型" clearable :style="{width: '100%'}">
-              <el-option label="中药处方" value="中药处方"></el-option>
-              <el-option label="西药处方" value="西药处方"></el-option>
-            </el-select>
+            <el-form-item label="供应商电话" prop="telephoneNum">
+              <el-input
+                v-model="queryParams.telephoneNum"
+                placeholder="请输入供应商电话"
+                clearable
+                size="small"
+                style="width: 220px"
+                @keyup.enter.native="handleQuery"
+              />
+            </el-form-item>
           </el-form-item>
           <el-form-item label="状态" prop="status">
             <el-select
@@ -48,7 +40,7 @@
               placeholder="请选择状态"
               clearable
               size="small"
-              style="width: 240px"
+              style="width: 190px"
             >
               <el-option
                 v-for="dict in statusOptions"
@@ -103,19 +95,14 @@
           <right-toolbar :showSearch.sync="showSearch" @queryTable="getList" ></right-toolbar>
         </el-row>
 
-        <el-table v-loading="loading" :data="infoList" @selection-change="handleSelectionChange">
+        <el-table v-loading="loading" :data="supplierList" @selection-change="handleSelectionChange">
           <el-table-column type="selection" width="55" align="center"/>
-          <el-table-column label="药品ID" align="center" prop="medicineId"/>
-          <el-table-column label="药品名称" align="center"  prop="medicineName" :show-overflow-tooltip="true"/>
-          <el-table-column label="药品编码" align="center"  prop="medicineCode"/>
-          <el-table-column label="生产厂家" align="center"  prop="factoryName" :width="160" :show-overflow-tooltip="true"/>
-          <el-table-column label="药品类型" align="center"  prop="medicineType" />
-          <el-table-column label="处方类型" align="center"  prop="prescriptionType"/>
-          <el-table-column label="单位(质量单位)" align="center" prop="unit"/>
-          <el-table-column label="处方价格" align="center"  prop="medicinePrice" />
-          <el-table-column label="库存" align="center"  prop="stock" />
-          <el-table-column label="预警值" align="center" prop="warnValue"/>
-          <el-table-column label="换算量" align="center" prop="convertQuantity"/>
+          <el-table-column label="供应商ID" align="center" prop="supplierId"/>
+          <el-table-column label="供应商名称" align="center"  prop="supplierName" :width="160" :show-overflow-tooltip="true"/>
+          <el-table-column label="联系人" align="center"  prop="contact"/>
+          <el-table-column label="供应商电话" align="center"  prop="telephoneNum" :width="160"/>
+          <el-table-column label="银行账号" align="center"  prop="bankCount" />
+          <el-table-column label="地址" align="center"  prop="address" :show-overflow-tooltip="true"/>
           <el-table-column label="状态" align="center" prop="status">
             <template slot-scope="scope">
               <el-switch
@@ -126,6 +113,7 @@
               ></el-switch>
             </template>
           </el-table-column>
+          <el-table-column label="创建时间" align="center" prop="createTime"/>
           <el-table-column
             label="操作"
             align="center"
@@ -169,44 +157,32 @@
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-row>
           <el-col :span="12">
-            <el-form-item label="药品名称" prop="medicineName">
-              <el-input v-model="form.medicineName" placeholder="请输入药品名称"/>
+            <el-form-item label="供应商名称" prop="supplierName">
+              <el-input v-model="form.supplierName" placeholder="请输入供应商名称"/>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="药品编码" prop="medicineCode">
-              <el-input v-model="form.medicineCode" placeholder="请输入药品编码"/>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="单位" prop="unit">
-              <el-input v-model="form.unit" placeholder="请输入质量单位g、kg"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="换算量" prop="convertQuantity">
-              <el-input v-model="form.convertQuantity" placeholder="请输入换算量" />
+            <el-form-item label="联系人" prop="contact">
+              <el-input v-model="form.contact" placeholder="请输入联系人"/>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="处方价格" prop="medicinePrice">
-              <el-input v-model="form.medicinePrice" placeholder="请输入保留两位小数处方价格" oninput="value=value.replace(/[^0-9.]/g,'')"/>
+            <el-form-item label="供应商电话" prop="telephoneNum">
+              <el-input v-model="form.telephoneNum" placeholder="请输入供应商电话"/>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="药品量" prop="stock">
-              <el-input v-model="form.stock" placeholder="请输入药品量"/>
+            <el-form-item label="银行账号" prop="bankCount">
+              <el-input v-model="form.bankCount" placeholder="请输入银行账号" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="预警值" prop="warnValue">
-              <el-input v-model="form.warnValue" placeholder="请输入预警值"/>
+            <el-form-item label="地址" prop="address">
+              <el-input v-model="form.address" placeholder="请输入地址" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -222,37 +198,6 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="药品类型" prop="medicineType">
-              <el-select v-model="form.medicineType">
-                <el-option label="中草药" value="中草药"></el-option>
-                <el-option label="西药" value="西药"></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="处方类型">
-              <el-select v-model="form.prescriptionType">
-                <el-option label="中药处方" value="中药处方"></el-option>
-                <el-option label="西药处方" value="西药处方"></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="生产厂家" prop="medicineId">
-              <el-select v-model="form.factoryId" placeholder="请选择生产厂家">
-                <el-option v-for="item in medicineFactoryOptions"
-                           :key="item.factoryId"
-                           :label="item.factoryName"
-                           :value="item.factoryId"
-                           :disabled="item.disabled"></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer" >
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -264,20 +209,17 @@
 
 <script>
 import {
-  listInfo,
-  getInfo,
-  addInfo,
-  updateInfo,
-  delInfo,
-  changeInfoStatus,
-  getFactoryList
-} from '@/api/medicine/info'
-import Treeselect from '@riophae/vue-treeselect'
+  listSupplier,
+  getSupplier,
+  addSupplier,
+  updateSupplier,
+  delSupplier,
+  changeSupplierStatus
+} from '@/api/medicine/supplier'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 
 export default {
-  name: 'Info',
-  components: { Treeselect },
+  name: 'Supplier',
   data() {
     return {
       // 遮罩层
@@ -292,8 +234,8 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
-      // 药品信息表格数据
-      infoList: null,
+      // 供应商信息表格数据
+      supplierList: null,
       // 弹出层标题
       title: '',
       // 是否显示弹出层
@@ -302,8 +244,6 @@ export default {
       dateRange: [],
       // 状态数据字典
       statusOptions: [],
-      //生产厂家字典
-      medicineFactoryOptions: [],
       // 表单参数
       form: {},
       defaultProps: {
@@ -316,11 +256,14 @@ export default {
       },
       // 表单校验
       rules: {
-        medicineInfo: [
-          { required: true, message: '药品名称不能为空', trigger: 'blur' }
+        supplierName: [
+          { required: true, message: '供应商名称不能为空', trigger: 'blur' }
         ],
-        medicineCode: [
-          { required: true, message: '药品编码不能为空', trigger: 'blur' }
+        contact: [
+          { required: true, message: '联系人不能为空', trigger: 'blur' }
+        ],
+        telephoneNum: [
+          { required: true, message: '供应商电话不能为空', trigger: 'blur' }
         ],
       }
     }
@@ -333,19 +276,16 @@ export default {
   },
   created() {
     this.getList()
-    this.getFactoryList()
     this.getDicts('sys_normal_disable').then(response => {
       this.statusOptions = response.data
     })
   },
   methods: {
-    /** 查询药品信息列表 */
+    /** 查询供应商信息列表 */
     getList() {
       this.loading = true
-      listInfo(this.addDateRange(this.queryParams, this.dateRange)).then(response => {
-          this.infoList = response.rows
-          // this.medicineTypeOptions = response.rows
-          // this.prescriptionTypeOptions = response.rows
+      listSupplier(this.addDateRange(this.queryParams, this.dateRange)).then(response => {
+          this.supplierList = response.rows
           this.total = response.total
           this.loading = false
         }
@@ -358,18 +298,18 @@ export default {
     },
     // 节点单击事件
     handleNodeClick(data) {
-      this.queryParams.medicineId = data.id
+      this.queryParams.supplierId = data.id
       this.getList()
     },
-    // 药品信息状态修改
+    // 供应商信息状态修改
     handleStatusChange(row) {
       let text = row.status === '0' ? '启用' : '停用'
-      this.$confirm('确认要"' + text + '""' + row.medicineName + '"药品吗?', '警告', {
+      this.$confirm('确认要"' + text + '""' + row.supplierName + '"供应商吗?', '警告', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(function() {
-        return changeInfoStatus(row.medicineId, row.status)
+        return changeSupplierStatus(row.supplierId, row.status)
       }).then(() => {
         this.msgSuccess(text + '成功')
       }).catch(function() {
@@ -384,15 +324,11 @@ export default {
     // 表单重置
     reset() {
       this.form = {
-        medicineName: undefined,
-        medicineCode: undefined,
-        unit: undefined,
-        convertQuantity: undefined,
-        prescriptionType: undefined,
-        stock: undefined,
-        warnValue: undefined,
-        medicineType: undefined,
-        medicinePrice: undefined,
+        supplierName: undefined,
+        contact: undefined,
+        telephoneNum: undefined,
+        bankCount: undefined,
+        address: undefined,
         status: '0'
       }
       this.resetForm('form')
@@ -410,38 +346,38 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.medicineId)
+      this.ids = selection.map(item => item.supplierId)
       this.single = selection.length != 1
       this.multiple = !selection.length
     },
     /** 新增按钮操作 */
     handleAdd() {
       this.reset()
-      this.title = '新增药品'
+      this.title = '新增供应商'
       this.open = true
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset()
-      const medicineId = row.medicineId || this.ids
-      getInfo(medicineId).then(response => {
+      const supplierId = row.supplierId || this.ids
+      getSupplier(supplierId).then(response => {
         this.form = response.data
         this.open = true
-        this.title = '修改药品'
+        this.title = '修改供应商'
       })
     },
     /** 提交按钮 */
     submitForm: function() {
       this.$refs['form'].validate(valid => {
         if (valid) {
-          if (this.form.medicineId != undefined) {
-            updateInfo(this.form).then(response => {
+          if (this.form.supplierId != undefined) {
+            updateSupplier(this.form).then(response => {
               this.msgSuccess('修改成功')
               this.open = false
               this.getList()
             })
           } else {
-            addInfo(this.form).then(response => {
+            addSupplier(this.form).then(response => {
               this.msgSuccess('新增成功')
               this.open = false
               this.getList()
@@ -452,35 +388,16 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const medicineIds = row.medicineId || this.ids
-      this.$confirm('是否确认删除药品信息编号为"' + medicineIds + '"的数据项?', '警告', {
+      const supplierIds = row.supplierId || this.ids
+      this.$confirm('是否确认删除供应商信息编号为"' + supplierIds + '"的数据项?', '警告', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(function() {
-        return delInfo(medicineIds)
+        return delSupplier(supplierIds)
       }).then(() => {
         this.getList()
         this.msgSuccess('删除成功')
-      })
-    },
-    /** 导出按钮操作 */
-    handleExport() {
-      const queryParams = this.queryParams
-      this.$confirm('是否确认导出所有药品信息数据项?', '警告', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(function() {
-        return exportUser(queryParams)
-      }).then(response => {
-        this.download(response.msg)
-      })
-    },
-    /** 生产厂家下拉数据 */
-    getFactoryList() {
-      getFactoryList().then(response => {
-        this.medicineFactoryOptions = response.data
       })
     }
   }
