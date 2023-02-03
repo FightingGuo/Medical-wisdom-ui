@@ -46,19 +46,6 @@ export function getSupplierList(data) {
   })
 }
 
-//提交入库
-export function submitEntryDB(purId, purStatus) {
-  const data = {
-    purId,
-    purStatus
-  }
-  return request({
-    url: '/medicine/purchase/submitEntryDB',
-    method: 'put',
-    data: data
-  })
-}
-
 //审核通过
 export function AuditAccess(purId) {
   return request({

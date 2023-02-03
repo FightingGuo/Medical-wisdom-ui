@@ -100,14 +100,6 @@
             v-hasPermi="['medicine:info:update']"
           >提交审核
           </el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleSubmit(scope.row)"
-            v-hasPermi="['medicine:info:update']"
-          >提交入库
-          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -331,37 +323,6 @@ export default {
         this.getList()
       })
     },
-
-    //提交入库
-    handleSubmit(row) {
-      this.$confirm('确认要提交"' + row.purId + '"单号入库吗?', '通知', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(function() {
-        return submitEntryDB(row.purId,row.purStatus)
-      }).then((response) => {
-        if (response.code != 200){
-          this.msgError(response.msg)
-        }
-        this.msgSuccess(response.msg)
-        this.getList()
-      })
-    },
-    // /** 审核通过按钮操作 */
-    // handleAuditAccess(row) {
-    //   const purIds = row.purId || this.ids
-    //   this.$confirm('是否确认审核通过采购编号为"' + purIds + '"的数据项?', '通知', {
-    //     confirmButtonText: '确定',
-    //     cancelButtonText: '取消',
-    //     type: 'warning'
-    //   }).then(function() {
-    //     return AuditAccess(purIds)
-    //   }).then(() => {
-    //     this.getList()
-    //     this.msgSuccess('修改成功')
-    //   })
-    // },
     /** 删除按钮操作 */
     handleDelete(row) {
       const purIds = row.purId || this.ids
