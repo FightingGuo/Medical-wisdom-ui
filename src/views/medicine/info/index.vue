@@ -344,8 +344,6 @@ export default {
       this.loading = true
       listInfo(this.addDateRange(this.queryParams, this.dateRange)).then(response => {
           this.infoList = response.rows
-          // this.medicineTypeOptions = response.rows
-          // this.prescriptionTypeOptions = response.rows
           this.total = response.total
           this.loading = false
         }
@@ -364,7 +362,7 @@ export default {
     // 药品信息状态修改
     handleStatusChange(row) {
       let text = row.status === '0' ? '启用' : '停用'
-      this.$confirm('确认要"' + text + '""' + row.medicineName + '"药品吗?', '警告', {
+      this.$confirm('确认要"' + text +'"' + row.medicineName + '"药品吗?', '警告', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
