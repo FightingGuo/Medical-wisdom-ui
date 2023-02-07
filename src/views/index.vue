@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container home">
+  <div id="building" class="app-container home">
     <el-row :gutter="20">
       <el-col :sm="24" :lg="24">
 <!--        <blockquote class="text-warning" style="font-size: 14px">-->
@@ -46,9 +46,9 @@
         <p>
           <b>当前版本:</b> <span>v{{ version }}</span>
         </p>
-        <p>
-          <el-tag type="danger">&yen;免费开源</el-tag>
-        </p>
+<!--        <p>-->
+<!--          <el-tag type="danger">&yen;免费开源</el-tag>-->
+<!--        </p>-->
         <p>
           <el-button
             type="primary"
@@ -537,6 +537,13 @@ export default {
 </script>
 
 <style scoped lang="scss">
+#building {
+  background:url("../assets/images/home-page.jpg");
+  width:100%;
+  height:100%;
+  position:fixed;
+  background-size:100% 100%;
+}
 .home {
   blockquote {
     padding: 10px 20px;
@@ -544,12 +551,14 @@ export default {
     font-size: 17.5px;
     border-left: 5px solid #eee;
   }
+
   hr {
     margin-top: 20px;
     margin-bottom: 20px;
     border: 0;
     border-top: 1px solid #eee;
   }
+
   .col-item {
     margin-bottom: 20px;
   }
