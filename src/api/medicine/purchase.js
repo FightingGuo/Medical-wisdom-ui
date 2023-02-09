@@ -21,7 +21,7 @@ export function getPurchase(purId) {
 export function addPurchase(data) {
   return request({
     url: '/medicine/purchase',
-    method: 'Purchase',
+    method: 'post',
     data: data
   })
 }
@@ -41,6 +41,15 @@ export function submitAudit(purId, purStatus) {
 export function getSupplierList(data) {
   return request({
     url: '/medicine/supplier/getSupplierList',
+    method: 'get',
+    data: data
+  })
+}
+
+//获取药品信息
+export function getMedicineList(data) {
+  return request({
+    url: '/medicine/info/getMedicineList',
     method: 'get',
     data: data
   })

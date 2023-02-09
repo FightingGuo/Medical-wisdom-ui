@@ -157,7 +157,7 @@
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-row>
           <el-col :span="12">
-            <el-form-item label="供应商名称" prop="supplierName">
+            <el-form-item label="供应商名称" prop="supplierName" label-width="100px">
               <el-input v-model="form.supplierName" placeholder="请输入供应商名称"/>
             </el-form-item>
           </el-col>
@@ -169,7 +169,7 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="供应商电话" prop="telephoneNum">
+            <el-form-item label="供应商电话" prop="telephoneNum" label-width="85px">
               <el-input v-model="form.telephoneNum" placeholder="请输入供应商电话"/>
             </el-form-item>
           </el-col>
@@ -263,8 +263,13 @@ export default {
           { required: true, message: '联系人不能为空', trigger: 'blur' }
         ],
         telephoneNum: [
-          { required: true, message: '供应商电话不能为空', trigger: 'blur' }
+          {pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/,
+            message: '请输入正确的手机号码',
+            trigger: 'blur'}
         ],
+        bankCount: [
+          { required: true, message: '账号不能少于或超过19位', trigger: 'blur', min: 19, max: 19 }
+        ]
       }
     }
   },

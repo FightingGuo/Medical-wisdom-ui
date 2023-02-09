@@ -31,7 +31,11 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="单据ID" align="center" prop="purId" :show-overflow-tooltip="true"/>
       <el-table-column label="采购名称" align="center" prop="supplierName"/>
-      <el-table-column label="采购批发总额" align="center" prop="purTotal" />
+      <el-table-column label="采购批发总额" align="center" prop="purTotal">
+        <template slot-scope="scope">
+          {{ fun(scope.row.purTotal) }}
+        </template>
+      </el-table-column>
       <el-table-column label="采购状态" align="center" prop="purStatus" >
         <template slot-scope="scope">
           <span v-if="scope.row.purStatus == 1">未提交</span>
@@ -151,6 +155,10 @@ export default {
     cancel() {
       this.open = false
       this.reset()
+    },
+    //数值数据保留两位小数
+    fun(val){
+      return Number(val).toFixed(2);
     },
     // 表单重置
     reset() {

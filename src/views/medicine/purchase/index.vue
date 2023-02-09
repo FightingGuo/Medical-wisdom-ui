@@ -65,9 +65,20 @@
 
     <el-table v-loading="loading" :data="PurchaseList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="单据ID" align="center" prop="purId" :show-overflow-tooltip="true"/>
-      <el-table-column label="采购名称" align="center" prop="supplierName"/>
-      <el-table-column label="采购批发总额" align="center" prop="purTotal" />
+      <el-table-column label="单据ID" align="center" prop="purId" :show-overflow-tooltip="true" />
+      <el-table-column label="采购名称" align="center" prop="supplierName" :show-overflow-tooltip="true"/>
+      <el-table-column label="药品名称" align="center" prop="medicineName" />
+      <el-table-column label="采购单价" align="center" prop="purPrice">
+        <template slot-scope="scope">
+          {{ fun(scope.row.purPrice) }}
+        </template>
+      </el-table-column>
+      <el-table-column label="采购数量" align="center" prop="purCount"/>
+      <el-table-column label="采购批发总额" align="center" prop="purTotal">
+        <template slot-scope="scope">
+          {{ fun(scope.row.purTotal) }}
+        </template>
+      </el-table-column>
       <el-table-column label="采购状态" align="center" prop="purStatus" >
         <template slot-scope="scope">
           <span v-if="scope.row.purStatus == 1">未提交</span>
@@ -100,6 +111,14 @@
             v-hasPermi="['medicine:info:update']"
           >提交审核
           </el-button>
+<!--          <el-button-->
+<!--            size="mini"-->
+<!--            type="text"-->
+<!--            aria-multiline="true"-->
+<!--            icon="el-icon-view"-->
+<!--            @click="handleInspect(scope.row,scope.index)"-->
+<!--            v-hasPermi="['media:notice:inspect']"-->
+<!--          >查看已购</el-button>-->
         </template>
       </el-table-column>
     </el-table>
@@ -111,13 +130,10 @@
       @pagination="getList"
     />
     <!-- 添加或修改岗位对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
+    <el-dialog :title="title" :visible.sync="openEdit" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="供应商名称" prop="supName" label-width="100px">
-          <el-input v-model="form.purId" placeholder="请输入供应商名称"/>
-        </el-form-item>
-        <el-form-item label="采购商" prop="contact">
-          <el-select v-model="queryParams.supplierId" placeholder="请选择采购商" clearable size="small">
+        <el-form-item label="采购商" prop="supplierId">
+          <el-select v-model="form.supplierId" placeholder="请选择采购商" clearable size="small">
             <el-option
               v-for="dict in supplierNameOptions"
               :key="dict.supplierId"
@@ -126,28 +142,25 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="采购总额" prop="purTotal">
-          <el-input v-model="form.telephoneNum" placeholder="请输入采购总额"/>
+        <el-form-item label="药品名称" prop="medicineId">
+          <el-select v-model="form.medicineId" placeholder="请选择采购药品" clearable size="small">
+            <el-option
+              v-for="dict in medicineNameOptions"
+              :key="dict.medicineId"
+              :label="dict.medicineName"
+              :value="dict.medicineId"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="药品单价" prop="purPrice">
+          <el-input v-model="form.purPrice" placeholder="请输入药品单价"/>
+        </el-form-item>
+        <el-form-item label="采购数量" prop="purCount">
+          <el-input v-model="form.purCount" placeholder="请输入采购总额"/>
         </el-form-item>
         <el-form-item label="采购者" prop="purName">
-          <el-input v-model="form.telephoneNum" placeholder="请输入采购者"/>
+          <el-input v-model="form.purName" placeholder="请输入采购者"/>
         </el-form-item>
-        <el-form-item label="银行账号" prop="supAccount">
-          <el-input v-model="form.bankCount" placeholder="请输入银行账号"/>
-        </el-form-item>
-<!--        <el-form-item label="地址" prop="address">-->
-<!--          <el-input v-model="form.address" placeholder="请输入地址"/>-->
-<!--        </el-form-item>-->
-<!--        <el-form-item label="状态" prop="purStatus">-->
-<!--          <el-select v-model="queryParams.purStatus" placeholder="采购状态" clearable size="small">-->
-<!--            <el-option-->
-<!--              v-for="dict in statusOptions"-->
-<!--              :key="dict.dictValue"-->
-<!--              :label="dict.dictLabel"-->
-<!--              :value="dict.dictValue"-->
-<!--            />-->
-<!--          </el-select>-->
-<!--        </el-form-item>-->
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -163,11 +176,10 @@ import {
   getPurchase,
   delPurchase,
   addPurchase,
+  getMedicineList,
   updatePurchase,
   submitAudit,
-  submitEntryDB,
-  getSupplierList,
-  AuditAccess
+  getSupplierList
 } from '@/api/medicine/purchase'
 
 export default {
@@ -191,11 +203,14 @@ export default {
       // 弹出层标题
       title: '',
       // 是否显示弹出层
-      open: false,
+      openEdit: false,
+      openView: false,
       // 状态数据字典
       statusOptions: [],
       //采购数据字典
       supplierNameOptions:[],
+      //药品数据字典
+      medicineNameOptions:[],
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -209,9 +224,6 @@ export default {
       // 表单校验
       rules: {
         purName: [
-          { required: true, message: '采购名称不能为空', trigger: 'blur' }
-        ],
-        supContact: [
           { required: true, message: '联系人不能为空', trigger: 'blur' }
         ],
       }
@@ -220,6 +232,7 @@ export default {
   created() {
     this.getList()
     this.getSupplierList()
+    this.getMedicineList()
     this.getDicts('sys_purchase_status').then(response => {
       this.statusOptions = response.data
     })
@@ -240,8 +253,13 @@ export default {
     },
     // 取消按钮
     cancel() {
-      this.open = false
+      this.openEdit = false
+      this.openView = false
       this.reset()
+    },
+    //数值数据保留两位小数
+    fun(val){
+      return Number(val).toFixed(2);
     },
     // 表单重置
     reset() {
@@ -274,7 +292,8 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset()
-      this.open = true
+      this.openEdit = true
+      this.openView = true
       this.title = '添加采购'
     },
     /** 修改按钮操作 */
@@ -283,7 +302,8 @@ export default {
       const purId = row.purId || this.ids
       getPurchase(purId).then(response => {
         this.form = response.data
-        this.open = true
+        this.openEdit = true
+        this.openView = true
         this.title = '修改采购'
       })
     },
@@ -294,13 +314,13 @@ export default {
           if (this.form.purId != undefined) {
             updatePurchase(this.form).then(response => {
               this.msgSuccess('修改成功')
-              this.open = false
+              this.openEdit = false
               this.getList()
             })
           } else {
             addPurchase(this.form).then(response => {
               this.msgSuccess('新增成功')
-              this.open = false
+              this.openEdit = false
               this.getList()
             })
           }
@@ -341,6 +361,12 @@ export default {
     getSupplierList() {
       getSupplierList().then(response => {
         this.supplierNameOptions = response.data
+      })
+    },
+    //药品信息下拉数据
+    getMedicineList(){
+      getMedicineList().then(response => {
+        this.medicineNameOptions = response.data
       })
     }
   }
