@@ -8,7 +8,7 @@
             <el-input
               v-model="queryParams.factoryName"
               placeholder="请输入厂家名称"
-              clearable
+              clearableg
               size="small"
               style="width: 240px"
               @keyup.enter.native="handleQuery"

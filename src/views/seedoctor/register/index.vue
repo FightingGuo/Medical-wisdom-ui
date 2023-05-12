@@ -73,7 +73,7 @@
           <el-button-group v-model="regBut">
             <el-button v-for="(name,i) in registerName" :key="i" @click.native="addPrice(name)">{{name}}</el-button>
           </el-button-group>
-          <span style="padding-left: 700px">
+          <span style="padding-left: 680px">
           挂号费:¥{{registerPrice}}元
           <el-button type="danger" plain icon="el-icon-zoom-in" @click="insertRegister">挂号收费</el-button>
           </span>

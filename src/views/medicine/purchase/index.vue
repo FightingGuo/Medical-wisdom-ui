@@ -111,14 +111,6 @@
             v-hasPermi="['medicine:info:update']"
           >提交审核
           </el-button>
-<!--          <el-button-->
-<!--            size="mini"-->
-<!--            type="text"-->
-<!--            aria-multiline="true"-->
-<!--            icon="el-icon-view"-->
-<!--            @click="handleInspect(scope.row,scope.index)"-->
-<!--            v-hasPermi="['media:notice:inspect']"-->
-<!--          >查看已购</el-button>-->
         </template>
       </el-table-column>
     </el-table>
@@ -130,7 +122,7 @@
       @pagination="getList"
     />
     <!-- 添加或修改岗位对话框 -->
-    <el-dialog :title="title" :visible.sync="openEdit" width="500px" append-to-body>
+    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="采购商" prop="supplierId">
           <el-select v-model="form.supplierId" placeholder="请选择采购商" clearable size="small">
@@ -203,8 +195,7 @@ export default {
       // 弹出层标题
       title: '',
       // 是否显示弹出层
-      openEdit: false,
-      openView: false,
+      open: false,
       // 状态数据字典
       statusOptions: [],
       //采购数据字典
@@ -253,8 +244,7 @@ export default {
     },
     // 取消按钮
     cancel() {
-      this.openEdit = false
-      this.openView = false
+      this.open = false
       this.reset()
     },
     //数值数据保留两位小数
@@ -292,8 +282,7 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset()
-      this.openEdit = true
-      this.openView = true
+      this.open = true
       this.title = '添加采购'
     },
     /** 修改按钮操作 */
@@ -302,8 +291,7 @@ export default {
       const purId = row.purId || this.ids
       getPurchase(purId).then(response => {
         this.form = response.data
-        this.openEdit = true
-        this.openView = true
+        this.open = true
         this.title = '修改采购'
       })
     },
@@ -314,13 +302,13 @@ export default {
           if (this.form.purId != undefined) {
             updatePurchase(this.form).then(response => {
               this.msgSuccess('修改成功')
-              this.openEdit = false
+              this.open = false
               this.getList()
             })
           } else {
             addPurchase(this.form).then(response => {
               this.msgSuccess('新增成功')
-              this.openEdit = false
+              this.open = false
               this.getList()
             })
           }

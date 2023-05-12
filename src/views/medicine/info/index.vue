@@ -2,7 +2,7 @@
   <div class="app-container">
     <el-row :gutter="20">
       <!--药品信息-->
-      <el-col :span="100" :xs="25">
+<!--      <el-col :span="100" :xs="25">-->
         <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
           <el-form-item label="生产厂家" prop="factoryId">
             <el-select v-model="queryParams.factoryId" placeholder="请选择生产厂家" clearable :style="{width: '100%'}">
@@ -161,7 +161,7 @@
           :limit.sync="queryParams.pageSize"
           @pagination="getList"
         />
-      </el-col>
+<!--      </el-col>-->
     </el-row>
 
     <!-- 添加或修改参数配置对话框 -->
