@@ -502,22 +502,6 @@ export default {
 
 
     },
-    //药品查询
-    drugQuery(){
-      listPhysic(this.queryParams).then(res=>{
-        this.drugList=res.rows;
-
-      })
-    },
-    //打开药用抽屉
-    opendrug(){
-      listPhysic(this.queryParams).then(res=>{
-
-        this.drugdrawer=true
-        this.drugList=res.rows;
-
-      })
-    },
     //确认添加处方
     confirm(){
       confirmCheck(this.patientId).then(res=>{
@@ -533,7 +517,6 @@ export default {
           this.temList=res.rows
           this.checkDrawer=false
         })
-
       })
 
     },

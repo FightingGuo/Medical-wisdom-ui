@@ -49,23 +49,23 @@
 <!--        <p>-->
 <!--          <el-tag type="danger">&yen;免费开源</el-tag>-->
 <!--        </p>-->
-        <p>
-          <el-button
-            type="primary"
-            size="mini"
-            icon="el-icon-cloudy"
-            plain
-            @click="goTarget('https://gitee.com/y_project/RuoYi-Vue')"
-            >访问码云（若依）</el-button
-          >
-          <el-button
-            size="mini"
-            icon="el-icon-s-home"
-            plain
-            @click="goTarget('http://ruoyi.vip')"
-            >访问若依官网</el-button
-          >
-        </p>
+<!--        <p>-->
+<!--          <el-button-->
+<!--            type="primary"-->
+<!--            size="mini"-->
+<!--            icon="el-icon-cloudy"-->
+<!--            plain-->
+<!--            @click="goTarget('https://gitee.com/y_project/RuoYi-Vue')"-->
+<!--            >访问码云（若依）</el-button-->
+<!--          >-->
+<!--          <el-button-->
+<!--            size="mini"-->
+<!--            icon="el-icon-s-home"-->
+<!--            plain-->
+<!--            @click="goTarget('http://ruoyi.vip')"-->
+<!--            >访问若依官网</el-button-->
+<!--          >-->
+<!--        </p>-->
       </el-col>
 
       <el-col :sm="24" :lg="12" style="padding-left: 50px">

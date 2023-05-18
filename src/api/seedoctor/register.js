@@ -1,11 +1,11 @@
 import request from '@/utils/request'
 
 //获取用户所属部门的下拉列表
-export function listDept(data) {
+export function listDept(query) {
   return request({
-    url: '/media/dept/getDeptList',
+    url: '/media/dept/getDeptAndUserList',
     method: 'get',
-    data: data
+    params: query
   })
 }
 
@@ -26,6 +26,15 @@ export function addreg(data) {
   })
 }
 
+//获取用户所属部门的下拉列表
+export function getDeptList(data) {
+  return request({
+    url: '/media/dept/getDeptList',
+    method: 'get',
+    data: data
+  })
+}
+
 // 查询患者详细
 export function getPatient(patientCard) {
   return request({
@@ -40,15 +49,6 @@ export function addregister(data) {
     url: '/seedoctor/register',
     method: 'post',
     data: data
-  })
-}
-
-// 根据流水号获得患者信息
-export function updateregister(data) {
-  return request({
-    url: '/seedoctor/register/add',
-    method: 'get',
-    params: data
   })
 }
 
@@ -79,7 +79,7 @@ export function deptId(data) {
 
 export function addparams(data) {
   return request({
-    url: '/seedoctor/show/list',
+    url: '/seedoctor/register',
     method: 'post',
     data: data
   })
